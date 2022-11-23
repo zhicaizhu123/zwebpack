@@ -2,6 +2,8 @@ import './demo.css';
 import './demo.less';
 import './demo.scss';
 import './music.mp3';
+import { count } from './count';
+import { add } from './sum';
 
 const hello = 1;
 
@@ -29,3 +31,12 @@ class Animal {
 const animal = new Animal();
 
 animal.getName(1, 2, 3);
+
+console.log(count());
+
+console.log(add(10, 20));
+
+if (module.hot) {
+  module.hot.accept('./count.js');
+  module.hot.accept('./sum.js');
+}

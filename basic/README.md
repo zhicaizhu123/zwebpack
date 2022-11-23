@@ -65,20 +65,20 @@ module.exports = {
   ``` 
 3. 配置：
   ```javascript
-  ...
-  module: {
-    rules: [
-      // loader配置
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      }
-    ]
+  module.exports = {
+    module: {
+      rules: [
+        // loader配置
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            'css-loader'
+          ]
+        }
+      ]
+    }
   }
-  ...
   ```
 
 ### 处理Less资源
@@ -92,21 +92,21 @@ module.exports = {
   ``` 
 3. 配置：
   ```javascript
-  ...
-  module: {
-    rules: [
-      // loader配置
-      {
-        test: /\.less$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader',
-        ]
-      }
-    ]
+  module.exports = {
+    module: {
+      rules: [
+        // loader配置
+        {
+          test: /\.less$/,
+          use: [
+            'style-loader',
+            'css-loader',
+            'less-loader',
+          ]
+        }
+      ]
+    }
   }
-  ...
   ```
 
 ### 处理Sass资源
@@ -120,21 +120,21 @@ module.exports = {
   ``` 
 3. 配置：
   ```javascript
-  ...
-  module: {
-    rules: [
-      // loader配置
-      {
-        test: /\.s(c|a)ss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ]
-      }
-    ]
+  module.exports = {
+    module: {
+      rules: [
+        // loader配置
+        {
+          test: /\.s(c|a)ss$/,
+          use: [
+            'style-loader',
+            'css-loader',
+            'sass-loader',
+          ]
+        }
+      ]
+    }
   }
-  ...
   ```
 
 ### 提取css文件
@@ -146,27 +146,27 @@ module.exports = {
   ```javascript
   const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-  ...
-  module: {
-    rules: [
-      // loader配置
-      {
-        test: /\.s(c|a)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ]
-      }
+  module.exports = {
+    module: {
+      rules: [
+        // loader配置
+        {
+          test: /\.s(c|a)ss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'sass-loader',
+          ]
+        }
+      ]
+    },
+  
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'styles/[name].[contenthash:8].css'
+      })
     ]
-  },
-
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'styles/[name].[contenthash:8].css'
-    })
-  ]
-  ...
+  }
   ```
 
 ### 样式兼容性
@@ -181,20 +181,22 @@ module.exports = {
 2. 配置
   `postcss-loader`需要在`css-loader`之前执行，在其他预处理`loader`（`less-loader`, `sass-loader`）后执行
   ```javascript
-  module: {
-    rules: [
-      // loader配置
-      {
-        test: /\.s(c|a)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'sass-loader',
+    module.exports = {
+      module: {
+        rules: [
+          // loader配置
+          {
+            test: /\.s(c|a)ss$/,
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader',
+              'postcss-loader',
+              'sass-loader',
+            ]
+          }
         ]
-      }
-    ]
-  },
+      },
+    }
   ```
 3. 新建`.browserlistrc`文件配置指定`postcss`要兼容的程度
   ```yml
@@ -213,22 +215,25 @@ module.exports = {
 2. 配置
   ```javascript
   const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-  ...
-
-  optimization: {
-    minimizer: [
-      new CssMinimizerPlugin(),
-    ],
-  },
+  
+  module.exports = {
+    optimization: {
+      minimizer: [
+        new CssMinimizerPlugin(),
+      ],
+    },
+  }
   ```
 这将仅在生产环境开启 CSS 优化。
 
 如果还想在开发环境下启用 CSS 优化，请将 `optimization.minimize` 设置为 `true`:
 ```javascript
-optimization: {
-  // [...]
-  minimize: true,
-},
+module.exports = {
+    optimization: {
+      // [...]
+      minimize: true,
+    },
+}
 ```
 
 ## 处理图片资源
@@ -238,7 +243,7 @@ optimization: {
 
 配置：
 ```javascript
-...
+module.exports = {
   module: {
     rules: [
       // loader配置
@@ -257,8 +262,8 @@ optimization: {
         }
       }
     ]
-  }
-...
+  }    
+}
 ```
 
 ## 处理其他资源
@@ -288,9 +293,11 @@ optimization: {
 
 配置：
 ```javascript
-output: {
-  // 清空上一次打包内容
-  clean: true,
+module.exports = {
+    output: {
+      // 清空上一次打包内容
+      clean: true,
+    }
 }
 ```
 
@@ -357,18 +364,20 @@ module.exports = {
 #### 在Webpack中使用
 - 安装依赖
 ```bash
-yarn i -D eslint-webpack-plugin eslint
+yarn add -D eslint-webpack-plugin eslint
 ```
 - 在 `Webpack` 配置文件引入插件
 ```javascript
 const ESLintWebpackPlugin = require('eslint-webpack-plugin')
-// ...
-plugins: [
- new ESLintWebpackPlugin({
-   context: resolve(__dirname, 'src')
- }),
- // ...
-]
+
+module.exports = {
+    plugins: [
+     new ESLintWebpackPlugin({
+       context: resolve(__dirname, 'src')
+     }),
+     // ...
+    ]
+}
 ```
 - 新建`.eslintrc.js`
 ```javascript
@@ -417,20 +426,22 @@ module.exports = {
 #### 在Webpack使用
 - 安装依赖
 ```bash
-yarn i -D @babel/core @babel/preset-env babel-loader
+yarn add -D @babel/core @babel/preset-env babel-loader
 ```
 - 在 `Webpack` 配置文件配置 `loader`
 ```javascript
-module: {
-    rules: [
-        {
-            test: /\.jsx$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader'
+module.exports = {
+    module: {
+        rules: [
+            {
+                test: /\.jsx$/,
+                exclude: /node_modules/,
+                use: {
+                  loader: 'babel-loader'
+                }
             }
-        }
-    ]
+        ]
+    }
 }
 ```
 - 在根目录新建 `babel.config.js` 文件
@@ -443,33 +454,37 @@ module.exports = {
 ## 处理HTML
 - 安装依赖
 ```bash
-yarn i -D html-webpack-plugin
+yarn add -D html-webpack-plugin
 ```
 - 在 `Webpack` 配置文件引入插件
 ```javascript
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// ...
-plugins: [
- new HtmlWebpackPlugin({
-   template: resolve(__dirname, 'public/index.html')
- }),
- // ...
-]
+
+module.exports = {
+    plugins: [
+     new HtmlWebpackPlugin({
+       template: resolve(__dirname, 'public/index.html')
+     }),
+     // ...
+    ]
+}
 ```
 
 ## 开发服务器&自动化
 - 安装依赖
 ```bash
-yarn i -D webpack-dev-server
+yarn add -D webpack-dev-server
 ```
 - 在 `Webpack` 配置文件配饰 `devServer`
 ```javascript
-devServer: {
-  host: 'localhost',
-  port: '3000',
-  open: true,
-  hot: true,
-},
+module.exports = {
+    devServer: {
+      host: 'localhost',
+      port: '3000',
+      open: true,
+      hot: true,
+    }
+}
 ```
 - 启动命令
 ```bash
@@ -478,9 +493,359 @@ webpack serve
 
 # 高级配置
 ## 提高开发体验
+### SourceMap
+SourceMap （源代码映射）是一个用来生成源码与构建后的代码一一映射的文件的方案。
+
+它会生产一个xxx.map文件，里面包含源代码和构建后代码的每一行，每一列的映射关系，当构建后代码出错了，会通过xxx.map文件从构建后的代码出错位置找到映射后源代码出错位置，从而让浏览器提示源代码文件出错的位置，帮助我们更快的定位到问题。
+
+主要分为下面其中模式：
+| 模式 | 说明 |
+| -- | -- |
+| eval | 每个 module 会封装到 eval 里包裹起来执行，并且会在末尾追加注释 //@ sourceURL. |
+| source-map | 生成一个 SourceMap 文件.|
+| hidden-source-map | 和 source-map 一样，但不会在 bundle 末尾追加注释. |
+| inline-source-map |生成一个 DataUrl 形式的 SourceMap 文件.|
+| eval-source-map|每个 module 会通过 eval() 来执行，并且生成一个 DataUrl 形式的 SourceMap |
+| cheap-source-map | 生成一个没有列信息（column-mappings）的 SourceMaps 文件，不包含 loader 的 sourcemap（譬如 babel 的 sourcemap） |
+| cheap-module-source-map | 生成一个没有列信息（column-mappings）的 SourceMaps 文件，同时 loader 的 sourcemap 也被简化为只包含对应行的。 |
+
+
+实际开发时我们主要关心两种情况就行：
+- 开发模式：`cheap-module-source-map`
+  - 优点：打包编译速度快，只包含行映射
+  - 缺点：没有列映射
+  ```javascript
+  module.exports = {
+    mode: 'development',
+    devtool: 'cheap-module-source-map'
+  }
+  ```
+- 生产模式：`source-map`
+  - 优点：包含行/列映射
+  - 缺点：打包编译速度更慢
+  ```javascript
+  module.exports = {
+    mode: 'production',
+    devtool: 'source-map'
+  }
+  ```
 
 ## 提升打包构建速度
+### HMR 热模块替换
+开发时我们修改一个模块代码，Webpack 默认会将所有模块全部重新打包编译，速度很慢。
+
+所以我们需要做到修改某个模块，就只有这个模块需要重新打包编译，其他模块不需要更新，这样打包就会快很多。
+
+HMR 就能在程序运行的时候，替换、更新或者删除模块，无需重新加载整个页面。
+
+基本配置：
+```javascript
+module.exports = {
+  devServer: {
+    hot: true, // 开启热更新
+    ...
+  }
+}
+```
+简单的js模块需要手动添加热模块更新代码才能实现，在对应的js模块下面添加如下代码
+```javascript
+if (module.hot) {
+    module.hot.accept('./js/count');
+    module.hot.accept('./js/sum');
+}
+```
+其中`module.hot.accept`接收的就是我们希望热替换的模块。
+
+如果是在 `vue` 或 `react` 项目，它们分别在`vue-loader`和`react-hot-loader`内部实现了热更新。
+
+对于样式模块，`style-loader`已经实现了热模块更新的功能。
+
+### oneOf
+使用 `oneOf` 根据文件类型加载对应的`loader`，只要能匹配一个即可退出，
+对于同一类型文件，比如处理js，如果需要多个`loader`，可以单独抽离js处理，确保`oneOf`里面一个文件类型对应一个`loader`。
+
+配置：
+```javascript
+module.exports = {
+    // 加载器
+  module: {
+    rules: [
+      {
+        oneOf: [
+          // less-loader配置
+          {
+            test: /\.less$/,
+            use: getStyleLoader('less-loader'),
+          },
+          // 处理图片资源
+          {
+            test: /\.(png|jpe?g|gif|webp|svg)$/,
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                // 小于10kb会对图片转为base64格式
+                maxSize: 10 * 1024,
+              },
+            },
+          },
+          // 处理其他资源
+          {
+            test: /\.(ttf|woff2?|mp4|mp3|avi)$/,
+            type: 'asset/resource',
+          },
+          // 处理js资源
+          {
+            test: /\.jsx?$/,
+            exclude: /node_modules/,
+            use: 'babel-loader',
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Include/Exclude
+我们在开发过程中可能会引入其他第三方的库和插件，所有文件都下载到 `node_modules` 中，而这些文件是不需要编译可以直接使用的。
+
+所以我们在对 `js` 文件处理的时候，要排除 `node_modules` 下的文件
+
+- include：只编译指定文件
+- exclude：排除文件不需要编译
+
+⚠️注意：`include`和`exclude`不能同时使用
+
+配置
+```javascript
+const ESLintWebpackPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
+    module: {
+        rules: [
+            {
+              test: /\.jsx?$/,
+              include: resolve(__dirname, '../src'),
+              // exclude: /node_modules/,
+              use: {
+                loader: 'babel-loader'
+              }
+            }
+        ]    
+    },
+
+    plugins: [
+        // ESLint 代码检验
+        new ESLintWebpackPlugin({
+          context: resolve(__dirname, '../demo'),
+          exclude: "node_modules" // 默认值
+        }),
+    ],
+}
+```
+
+### Cache 缓存
+每次打包时 `js` 文件都需要经过 `ESLint` 检查和 `Babel` 编译，速度比较慢。
+
+我们可以缓存之前的 `ESLint` 检查和 `Babel` 编译的结果，这样就可以在后面打包时速度更快了。
+
+配置：
+```javascript
+const ESLintWebpackPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
+    module: {
+        rules: [
+            {
+              test: /\.jsx?$/,
+              include: resolve(__dirname, '../src'),
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true, // 开启babel缓存
+                cacheCompression: false, // 关闭缓存压缩
+              }
+            }
+        ]    
+    },
+
+    plugins: [
+        // ESLint 代码检验
+        new ESLintWebpackPlugin({
+          context: resolve(__dirname, '../demo'),
+          exclude: "node_modules"， // 默认值
+          cache: true, // 开启ESLint缓存
+        }),
+    ]
+}
+```
+
+### Thread 多进程
+当项目越来越大时，打包速度越来越慢。
+
+我们想继续提升打包速度，其实就是提升 js 的打包速度，因为其他文件都比较少，
+
+而对 js 文件处理主要就是处理 ESLint、Babel、Terser 三个工具，所以我们要提升他们的运行速度。
+
+我们可以开启多进程同时处理 js 文件，这样速度就比之前单进程的打包更快了。
+
+⚠️注意：仅在特别耗时的操作中使用，因为每个进程的启动都需要有一定的时间开销。
+
+安装依赖：
+```bash
+yarn add -D thread-loader
+```
+
+获取CPU核数：
+```javascript
+const os = require('os')
+// CPU核数
+const threads = os.cups().length
+```
+
+配置：
+```javascript
+const ESLintWebpackPlugin = require('eslint-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+    module: {
+        rules: [
+            {
+              test: /\.jsx?$/,
+              include: resolve(__dirname, '../src'),
+              use: [
+                // 开启多进程
+                {
+                  loader: 'thread-loader',
+                  options: {
+                    workers: threads,
+                  },
+                },
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    cacheDirectory: true, // 开启babel缓存
+                    cacheCompression: false, // 关闭缓存压缩
+                  }
+                }
+              ]
+            }
+        ]    
+    },
+
+    plugins: [
+        // ESLint 代码检验
+        new ESLintWebpackPlugin({
+          context: resolve(__dirname, '../demo'),
+          exclude: "node_modules"， // 默认值
+          cache: true, // 开启ESLint缓存
+            threads, // 开启多进程
+        }),
+    ],
+
+    optimization: {
+      minimizer: [
+        new TerserWebpackPlugin({ parallel: threads })
+      ],
+    },
+}
+```
+
+
 
 ## 减少打包体积
+### Tree Shaking
+开发时，我们第一个一些工具函数，或者引用其他第三方的库。
+
+如果没有特殊处理的话，我们打包时会全量引入，但是实际我们用到的就只有其他少部分的模块，这样会导致我们项目打包体积过大。
+
+`Tree Shaking`就是用于描述移除 `js` 中没有使用上的代码。
+
+⚠️注意：`Tree Shaking` 依赖 `ESModule`。
+
+默认 Webpack 已经开启了这个功能，不需要额外配置。
+
+### 较少Babel生成代码的体积
+Babel 为编译的每个文件都插入了辅助代码，使代码体积过大。
+
+Babel 对一些公共的方法使用了非常小的辅助代码，比如 `_extend`等。默认情况下会被添加到每一个使用到它的文件中。
+
+我们可以将这些辅助代码作为一个独立的模块，来避免重复引入。
+
+- `@babel/plugin-transform-runtime`：禁用 Babel 自动对每一个文件的runtime注入，而是引入`@babel/plugin-transform-runtime`，并且使所有辅助代码从这里引用。
+
+安装依赖：
+```bash
+yarn add -D @babel/plugin-transform-runtime
+```
+
+在`babel.config.js`中配置`@babel/plugin-transform-runtime`：
+```javascript
+module.exports = {
+  plugins: ['@babel/plugin-transform-runtime'], // 减少代码体积
+  presets: ['@babel/preset-env'],
+};
+```
+
+### Image Minimizer 图片压缩
+如果项目引入了较多图片，而且图片的提交比较大，将来请求速度比较慢。
+
+我们可以对图片进行压缩，减少图片体积。
+
+安装依赖：
+```bash
+yarn add -D image-minimizer-webpack-plugin imagemin imagemin-gifsicle imagemin-jpegtran imagemin-optipng imagemin-svgo
+```
+
+配置：
+```javascript
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+
+module.exports = {
+    // 优化配置
+  optimization: {
+    minimizer: [
+      // 图片压缩
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.imageminMinify,
+          options: {
+            plugins: [
+              ["gifsicle", { interlaced: true }],
+              ["jpegtran", { progressive: true }],
+              ["optipng", { optimizationLevel: 5 }],
+              [
+                "svgo",
+                {
+                  plugins: [
+                    {
+                      name: "preset-default",
+                      params: {
+                        overrides: {
+                          removeViewBox: false,
+                          addAttributesToSVGElement: {
+                            params: {
+                              attributes: [
+                                { xmlns: "http://www.w3.org/2000/svg" },
+                              ],
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+      }),
+    ]
+  }
+}
+```
 
 ## 优化代码运行性能
+### Code Split 代码分割
+
+### Preload 和 Prefetch
