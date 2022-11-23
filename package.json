@@ -29,7 +29,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
-    "serve:basic": "webpack serve --config ./basic/webpack.config.js",
-    "build:basic": "webpack --config ./basic/webpack.config.js"
+    "basic:serve": "webpack serve --config ./basic/webpack.config.js",
+    "basic:build": "webpack --config ./basic/webpack.config.js"
   }
 }
