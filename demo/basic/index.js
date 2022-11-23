@@ -1,6 +1,7 @@
 import './demo.css';
 import './demo.less';
 import './demo.scss';
+import './music.mp3';
 
 const hello = 1;
 

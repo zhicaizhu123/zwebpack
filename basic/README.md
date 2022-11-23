@@ -137,7 +137,101 @@ module.exports = {
   ...
   ```
 
-### 处理图片资源
+### 提取css文件
+1. 安装依赖
+  ```bash
+  yarn add -D mini-css-extract-plugin
+  ```
+2. 配置：
+  ```javascript
+  const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+  ...
+  module: {
+    rules: [
+      // loader配置
+      {
+        test: /\.s(c|a)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ]
+      }
+    ]
+  },
+
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'styles/[name].[contenthash:8].css'
+    })
+  ]
+  ...
+  ```
+
+### 样式兼容性
+针对市面上不同浏览器样式的兼容性问题，我们需要借助`postcss`工具来提高我们编写样式的兼容性程度。
+
+在 `Webpack` 中我们需要配置 `postcss-loader` 对样式文件进行处理。
+
+1. 安装依赖
+  ```bash
+  yarn add -D postcss-loader postcss postcss-preset-env
+  ```
+2. 配置
+  `postcss-loader`需要在`css-loader`之前执行，在其他预处理`loader`（`less-loader`, `sass-loader`）后执行
+  ```javascript
+  module: {
+    rules: [
+      // loader配置
+      {
+        test: /\.s(c|a)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ]
+      }
+    ]
+  },
+  ```
+3. 新建`.browserlistrc`文件配置指定`postcss`要兼容的程度
+  ```yml
+  # 支持最新的两个版本的浏览器
+  last 2 version
+  # 覆盖99%的浏览器
+  > 1%
+  # 不包括已经死掉的浏览器
+  not dead
+  ```
+### 样式压缩
+1. 安装依赖
+  ```bash
+  yarn add -D css-minimizer-webpack-plugin
+  ```
+2. 配置
+  ```javascript
+  const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+  ...
+
+  optimization: {
+    minimizer: [
+      new CssMinimizerPlugin(),
+    ],
+  },
+  ```
+这将仅在生产环境开启 CSS 优化。
+
+如果还想在开发环境下启用 CSS 优化，请将 `optimization.minimize` 设置为 `true`:
+```javascript
+optimization: {
+  // [...]
+  minimize: true,
+},
+```
+
+## 处理图片资源
 过去在`Webpack4`中，我们需要使用`file-loader`和`url-loader`处理图片资源。
 
 但是在`Webpack5`中，已经将这两个`loader`内置到`Webpack`中，我们只需要简单配置即可处理图片资源。
@@ -167,8 +261,8 @@ module.exports = {
 ...
 ```
 
-### 处理其他资源
-在`Webpack5`中，我们可以通过loader的`type: 'asset'`，原封不动输出资源，所以我们可以利用这个属性处理不需要进行处理的资源。
+## 处理其他资源
+在`Webpack5`中，我们可以通过loader的`type: 'asset/resource'`，原封不动输出资源，所以我们可以利用这个属性处理不需要进行处理的资源。
 
 配置：
 ```javascript
@@ -178,7 +272,7 @@ module.exports = {
       // loader配置
       {
         test: /\.(ttf|woff2?|mp4|mp3|avi)$/,
-        type: 'asset',
+        type: 'asset/resource',
         generator: {
           // 文件输出目录
           filename: 'media/[name]_[hash:6][ext][query]',
@@ -189,8 +283,7 @@ module.exports = {
 ...
 ```
 
-
-### 自动清空上次打包资源
+## 自动清空上次打包资源
 设置`Webpack`内容的`clean: true`则可以清空上次打包内容。
 
 配置：
@@ -382,3 +475,12 @@ devServer: {
 ```bash
 webpack serve
 ```
+
+# 高级配置
+## 提高开发体验
+
+## 提升打包构建速度
+
+## 减少打包体积
+
+## 优化代码运行性能
