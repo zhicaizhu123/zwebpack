@@ -1,6 +1,6 @@
-const { resolve } = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ESLintWebpackPlugin = require('eslint-webpack-plugin')
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 
 // 获取处理样式的loader
 function getStyleLoader(pre) {
@@ -8,7 +8,7 @@ function getStyleLoader(pre) {
     'style-loader',
     'css-loader',
     pre,
-  ].filter(Boolean)
+  ].filter(Boolean);
 }
 
 module.exports = {
@@ -89,6 +89,14 @@ module.exports = {
     })
   ],
 
+  // 开发服务器
+  devServer: {
+    host: 'localhost',
+    port: '3000',
+    open: true,
+    hot: true,
+  },
+
   // 模式
   mode: 'development'
-}
+};

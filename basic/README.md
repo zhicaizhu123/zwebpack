@@ -266,7 +266,7 @@ module.exports = {
 ```bash
 yarn i -D eslint-webpack-plugin eslint
 ```
-- 在 Webpack 配置文件引入插件
+- 在 `Webpack` 配置文件引入插件
 ```javascript
 const ESLintWebpackPlugin = require('eslint-webpack-plugin')
 // ...
@@ -277,7 +277,7 @@ plugins: [
  // ...
 ]
 ```
-- 新建.eslintrc.js
+- 新建`.eslintrc.js`
 ```javascript
 module.exports = {
   extends: ['eslint:recommended'],
@@ -298,9 +298,9 @@ module.exports = {
 ```
 
 ### Babel
-JavaScript编辑器。
+`JavaScript`编辑器。
 
-主要用于将 ES6 语法编译成向后兼容的JavaScript语法，以便能够运行在当前和旧版本的浏览器上。
+主要用于将 `ES6` 语法编译成向后兼容的`JavaScript`语法，以便能够运行在当前和旧版本的浏览器上。
 
 #### 配置文件
 - 在项目根目录新建配置文件。
@@ -326,7 +326,7 @@ module.exports = {
 ```bash
 yarn i -D @babel/core @babel/preset-env babel-loader
 ```
-- 在 Webpack 配置文件引入插件
+- 在 `Webpack` 配置文件配置 `loader`
 ```javascript
 module: {
     rules: [
@@ -340,9 +340,45 @@ module: {
     ]
 }
 ```
-- 在根目录新建 babel.config.js 文件
+- 在根目录新建 `babel.config.js` 文件
 ```javascript
 module.exports = {
   presets: ['@babel/preset-env']
 }
+```
+
+## 处理HTML
+- 安装依赖
+```bash
+yarn i -D html-webpack-plugin
+```
+- 在 `Webpack` 配置文件引入插件
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+// ...
+plugins: [
+ new HtmlWebpackPlugin({
+   template: resolve(__dirname, 'public/index.html')
+ }),
+ // ...
+]
+```
+
+## 开发服务器&自动化
+- 安装依赖
+```bash
+yarn i -D webpack-dev-server
+```
+- 在 `Webpack` 配置文件配饰 `devServer`
+```javascript
+devServer: {
+  host: 'localhost',
+  port: '3000',
+  open: true,
+  hot: true,
+},
+```
+- 启动命令
+```bash
+webpack serve
 ```
