@@ -17,7 +17,8 @@ getData().then(res => {
 })
 
 class Animal {
-  async getName() {
+  async getName(...args) {
+    console.log(args)
     const map = new Map()
     map.set(123, 456)
     return '124'
@@ -26,4 +27,4 @@ class Animal {
 
 const animal = new Animal()
 
-animal.getName()
+animal.getName(1, 2, 3)
