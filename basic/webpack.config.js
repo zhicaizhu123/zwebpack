@@ -1,5 +1,6 @@
 const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ESLintWebpackPlugin = require('eslint-webpack-plugin')
 
 // 获取处理样式的loader
 function getStyleLoader(pre) {
@@ -67,6 +68,13 @@ module.exports = {
         },
       },
       // 处理js资源
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
     ]
   },
 
@@ -76,6 +84,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '../demo/basic/index.html')
     }),
+    new ESLintWebpackPlugin({
+      context: resolve(__dirname, '../demo')
+    })
   ],
 
   // 模式
