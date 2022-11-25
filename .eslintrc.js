@@ -5,6 +5,7 @@ module.exports = {
     node: true, // 开启node全局变量
     browser: true, // 开启浏览器全局变量
   },
+  parser: "@babel/eslint-parser", 
   parserOptions: {
     ecmaVersion: 8,
     sourceType: 'module',

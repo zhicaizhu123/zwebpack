@@ -6,6 +6,7 @@ const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 const { IS_BUILD, RUN_PORT } = require('./env');
 
 // CPU核shu
@@ -31,6 +32,10 @@ module.exports = {
     path: resolve(__dirname, 'dist'),
     // 文件输出名称
     filename: 'js/[name].[chunkhash:8].js',
+    // chunk的名称
+    chunkFilename: 'js/[name].chunk.[contenthash:8].js',
+    // 静态资源打包路径
+    assetModuleFilename: 'assets/[name].[contenthash:8][ext][query]',
     // 清空上一次打包内容
     clean: IS_BUILD,
   },
@@ -65,19 +70,19 @@ module.exports = {
                 maxSize: 10 * 1024,
               },
             },
-            generator: {
-              // 文件输出目录
-              filename: 'images/[name]_[hash:8][ext][query]',
-            },
+            // generator: {
+            //   // 文件输出目录
+            //   filename: 'images/[name]_[hash:8][ext][query]',
+            // },
           },
           // 处理其他资源
           {
             test: /\.(ttf|woff2?|mp4|mp3|avi)$/,
             type: 'asset/resource',
-            generator: {
-              // 文件输出目录
-              filename: 'media/[name]_[hash:8][ext][query]',
-            },
+            // generator: {
+            //   // 文件输出目录
+            //   filename: 'media/[name]_[hash:8][ext][query]',
+            // },
           },
           // 处理js资源
           {
@@ -121,13 +126,42 @@ module.exports = {
     }),
     // 提出css文件
     IS_BUILD && new MiniCssExtractPlugin({
-      filename: 'styles/[name].[contenthash:8].css'
+      filename: 'styles/[name].[contenthash:8].css',
+      chunkFilename: 'styles/[name].chunk.[contenthash:8].css',
     }),
+    IS_BUILD && new PreloadWebpackPlugin({
+      rel: 'prefetch',
+      // rel: 'preload',
+      // as: 'script'
+    })
   ].filter(Boolean),
 
   // 优化配置
   optimization: {
     minimize: IS_BUILD,
+    splitChunks: {
+      chunks: 'all',
+      // 以下为默认配置
+      // chunks: 'async', // 需分割的模块
+      // minSize: 20000, // 代码分割最小的大小
+      // minRemainingSize: 0, // 类似minSize，最后确保提出的文件大小不能为0
+      // minChunks: 1, // 至少被引用的次数，满足条件才会被分割
+      // maxAsyncRequests: 30, // 按需加载时并行加载的文件最大数量
+      // maxInitialRequests: 30, // 入口js 文件最大并行数量
+      // enforceSizeThreshold: 50000, // 超过500kb一定要单独打包
+      // cacheGroups: {
+      //   defaultVendors: {
+      //     test: /[\\/]node_modules[\\/]/,
+      //     priority: -10, // 权重，越大越高
+      //     reuseExistingChunk: true, // 如果当前chunk包含已从主 bundle 中拆分出的模块，则它将被重用，而不是重新生成新的模块
+      //   },
+      //   default: {
+      //     minChunks: 2, // 这里的minChunks权重最高
+      //     priority: -20,
+      //     reuseExistingChunk: true,
+      //   },
+      // },
+    },
     minimizer: [
       // 样式压缩
       IS_BUILD && new CssMinimizerPlugin(),
@@ -169,6 +203,9 @@ module.exports = {
         },
       }),
     ].filter(Boolean),
+    runtimeChunk: {
+      name: (entrypoint) => `runtime.${entrypoint.name}`
+    }
   },
 
   // 开发服务器
